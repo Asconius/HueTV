@@ -9,7 +9,7 @@ public class BootUpReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.w("onReceive", "---------------------------------------------------------------------");
-        Log.w("onReceive", "onReceive");
+        Log.w("onReceive", "BootUpReceiver.onReceive");
+        new ScreenCaptureJobScheduler().scheduleJob(context);
     }
 }
