@@ -8,7 +8,7 @@ import android.content.Context;
 public class ScreenCaptureJobScheduler {
 
     public void scheduleJob(Context context) {
-        ComponentName serviceComponent = new ComponentName(context, CaptureScreenJobService.class);
+        ComponentName serviceComponent = new ComponentName(context, ScreenCaptureJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
         builder.setMinimumLatency(1 * 1000); // wait at least
         builder.setOverrideDeadline(3 * 1000); // maximum delay

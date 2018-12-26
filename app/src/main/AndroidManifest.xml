@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".CaptureScreenJobService"
+            android:name=".ScreenCaptureJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
