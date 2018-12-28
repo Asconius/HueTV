@@ -12,6 +12,7 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -68,12 +70,24 @@ public class MainActivity extends Activity {
                     Image image = reader.acquireNextImage();
                     Log.w("onImageAvailable", "MainActivity.OnImageAvailableListener.onImageAvailable " + image);
                     Bitmap bitmap = convert(image);
+                    createPaletteAsync(bitmap);
                     image.close();
                     reader.close();
                 }
             }, null);
             createVirtualDisplay();
         }
+    }
+
+    public void createPaletteAsync(Bitmap bitmap) {
+        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+            public void onGenerated(Palette p) {
+                List<Palette.Swatch> list = p.getSwatches();
+                for (Palette.Swatch swatch: p.getSwatches()) {
+                    Log.w("createPaletteAsync", "MainActivity.createPaletteAsync " + swatch.getRgb());
+                }
+            }
+        });
     }
 
     public Bitmap convert(Image image) {
