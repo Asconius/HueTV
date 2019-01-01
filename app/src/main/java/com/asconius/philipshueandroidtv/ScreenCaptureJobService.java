@@ -11,7 +11,7 @@ public class ScreenCaptureJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         EventBus.getDefault().post(new ImageRequestEvent());
-        Log.w("onStartJob", "ScreenCaptureJobService.onStartJob");
+        Log.d("onStartJob", "ScreenCaptureJobService.onStartJob");
         new ScreenCaptureJobScheduler().scheduleJob(getApplicationContext());
         return true;
     }
