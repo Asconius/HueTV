@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
@@ -17,7 +15,10 @@ import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
+import com.asconius.philipshueandroidtv.event.ImageRequestEvent;
+import com.asconius.philipshueandroidtv.event.ScheduleJobEvent;
 import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
@@ -35,7 +36,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends Activity {
 
@@ -44,24 +44,43 @@ public class MainActivity extends Activity {
     private MediaProjectionManager mediaProjectionManager;
     private ImageReader imageReader;
     private PHHueSDK phHueSDK;
+    private boolean isServiceRunning = false;
+    private Button startButton;
+    private Button stopButton;
 
-    public void promptUser(View view) {
+    public void authorize(View view) {
         startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), 1);
+    }
+
+    public void start(View view) {
+        isServiceRunning = true;
+        new ScreenCaptureJobScheduler().scheduleJob(this);
+        startButton.setEnabled(false);
+        stopButton.setEnabled(true);
+    }
+
+    public void stop(View view) {
+        isServiceRunning = false;
+        startButton.setEnabled(true);
+        stopButton.setEnabled(false);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        phHueSDK = PHHueSDK.create();
         mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         EventBus.getDefault().register(this);
+        startButton = findViewById(R.id.startButton);
+        stopButton = findViewById(R.id.stopButton);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("onActivityResult", "MainActivity.onActivityResult");
         mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
-        new ScreenCaptureJobScheduler().scheduleJob(this);
+        startButton.setEnabled(true);
     }
 
     @Override
@@ -74,6 +93,13 @@ public class MainActivity extends Activity {
     @Subscribe
     public void onImageRequestEvent(ImageRequestEvent event) {
         captureImage();
+    }
+
+    @Subscribe
+    public void onScheduleJobEvent(ScheduleJobEvent event) {
+        if (isServiceRunning) {
+            new ScreenCaptureJobScheduler().scheduleJob(getApplicationContext());
+        }
     }
 
     private void captureImage() {
@@ -99,28 +125,31 @@ public class MainActivity extends Activity {
     public void createPaletteAsync(Bitmap bitmap) {
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
+                Log.d("onGenerated", "MainActivity.PaletteAsyncListener.onGenerated");
                 PHBridge bridge = phHueSDK.getSelectedBridge();
-                List<PHLight> allLights = bridge.getResourceCache().getAllLights();
-                for (PHLight light : allLights) {
-                    Hue hue = null;
-                    List<Palette.Swatch> swatchList = palette.getSwatches();
-                    Collections.sort(swatchList, new Comparator<Palette.Swatch>() {
-                        @Override
-                        public int compare(Palette.Swatch o1, Palette.Swatch o2) {
-                            return Integer.compare(o1.getPopulation(), o2.getPopulation());
+                if (bridge != null) {
+                    List<PHLight> allLights = bridge.getResourceCache().getAllLights();
+                    for (PHLight light : allLights) {
+                        Hue hue = null;
+                        List<Palette.Swatch> swatchList = palette.getSwatches();
+                        Collections.sort(swatchList, new Comparator<Palette.Swatch>() {
+                            @Override
+                            public int compare(Palette.Swatch o1, Palette.Swatch o2) {
+                                return Integer.compare(o1.getPopulation(), o2.getPopulation());
+                            }
+                        });
+                        Iterator<Palette.Swatch> iterator = swatchList.iterator();
+                        if (iterator.hasNext()) {
+                            Palette.Swatch swatch = iterator.next();
+                            hue = new Hue(swatch.getRgb());
                         }
-                    });
-                    Iterator<Palette.Swatch> iterator = swatchList.iterator();
-                    if (iterator.hasNext()) {
-                        Palette.Swatch swatch = iterator.next();
-                        hue = new Hue(swatch.getRgb());
-                    }
-                    if (hue != null) {
-                        PHLightState lightState = new PHLightState();
-                        lightState.setHue(hue.getHue());
-                        lightState.setSaturation(hue.getSaturation());
-                        lightState.setBrightness(hue.getBrightness());
-                        bridge.updateLightState(light, lightState, listener);
+                        if (hue != null) {
+                            PHLightState lightState = new PHLightState();
+                            lightState.setHue(hue.getHue());
+                            lightState.setSaturation(hue.getSaturation());
+                            lightState.setBrightness(hue.getBrightness());
+                            bridge.updateLightState(light, lightState, listener);
+                        }
                     }
                 }
             }
