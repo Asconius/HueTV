@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
     private boolean isServiceRunning = false;
     private Button startButton;
     private Button stopButton;
+    private ScreenCaptureJobScheduler screenCaptureJobScheduler;
 
     public void authorize(View view) {
         startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), 1);
@@ -54,7 +55,7 @@ public class MainActivity extends Activity {
 
     public void start(View view) {
         isServiceRunning = true;
-        new ScreenCaptureJobScheduler().scheduleJob(this);
+        screenCaptureJobScheduler.scheduleJob(this);
         startButton.setEnabled(false);
         stopButton.setEnabled(true);
     }
@@ -74,6 +75,7 @@ public class MainActivity extends Activity {
         EventBus.getDefault().register(this);
         startButton = findViewById(R.id.startButton);
         stopButton = findViewById(R.id.stopButton);
+        screenCaptureJobScheduler = new ScreenCaptureJobScheduler();
     }
 
     @Override
@@ -98,7 +100,7 @@ public class MainActivity extends Activity {
     @Subscribe
     public void onScheduleJobEvent(ScheduleJobEvent event) {
         if (isServiceRunning) {
-            new ScreenCaptureJobScheduler().scheduleJob(getApplicationContext());
+            screenCaptureJobScheduler.scheduleJob(getApplicationContext());
         }
     }
 
