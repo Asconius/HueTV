@@ -31,8 +31,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.nio.ByteBuffer;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +62,10 @@ public class MainActivity extends Activity {
         isServiceRunning = false;
         startButton.setEnabled(true);
         stopButton.setEnabled(false);
+    }
+
+    public PHHueSDK getPhHueSDK() {
+        return phHueSDK;
     }
 
     @Override
@@ -128,34 +130,32 @@ public class MainActivity extends Activity {
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
                 Log.d("onGenerated", "MainActivity.PaletteAsyncListener.onGenerated");
-                PHBridge bridge = phHueSDK.getSelectedBridge();
-                if (bridge != null) {
-                    List<PHLight> allLights = bridge.getResourceCache().getAllLights();
-                    for (PHLight light : allLights) {
-                        Hue hue = null;
-                        List<Palette.Swatch> swatchList = palette.getSwatches();
-                        Collections.sort(swatchList, new Comparator<Palette.Swatch>() {
-                            @Override
-                            public int compare(Palette.Swatch o1, Palette.Swatch o2) {
-                                return Integer.compare(o1.getPopulation(), o2.getPopulation());
-                            }
-                        });
-                        Iterator<Palette.Swatch> iterator = swatchList.iterator();
-                        if (iterator.hasNext()) {
-                            Palette.Swatch swatch = iterator.next();
-                            hue = new Hue(swatch.getRgb());
-                        }
-                        if (hue != null) {
-                            PHLightState lightState = new PHLightState();
-                            lightState.setHue(hue.getHue());
-                            lightState.setSaturation(hue.getSaturation());
-                            lightState.setBrightness(hue.getBrightness());
-                            bridge.updateLightState(light, lightState, listener);
-                        }
-                    }
-                }
+                updateLightState(palette);
             }
         });
+    }
+
+    public void updateLightState(Palette palette) {
+        PHBridge bridge = phHueSDK.getSelectedBridge();
+        if (bridge != null) {
+            List<PHLight> allLights = bridge.getResourceCache().getAllLights();
+            List<Palette.Swatch> swatchList = palette.getSwatches();
+            Iterator<Palette.Swatch> iterator = swatchList.iterator();
+            for (PHLight light : allLights) {
+                Hue hue = null;
+                if (iterator.hasNext()) {
+                    Palette.Swatch swatch = iterator.next();
+                    hue = new Hue(swatch.getRgb());
+                }
+                if (hue != null) {
+                    PHLightState lightState = new PHLightState();
+                    lightState.setHue(hue.getHue());
+                    lightState.setSaturation(hue.getSaturation());
+                    lightState.setBrightness(hue.getBrightness());
+                    bridge.updateLightState(light, lightState, listener);
+                }
+            }
+        }
     }
 
     public Bitmap convert(Image image) {
@@ -187,8 +187,7 @@ public class MainActivity extends Activity {
     PHLightListener listener = new PHLightListener() {
 
         @Override
-        public void onSuccess() {
-        }
+        public void onSuccess() {}
 
         @Override
         public void onStateUpdate(Map<String, String> arg0, List<PHHueError> arg1) {
