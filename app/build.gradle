@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'key0'
             keyPassword 'password'
-            storeFile file('C:/Users/joern/StudioProjects/PhilipsHueAndroidTV/keystore.jks')
+            storeFile file('C:/Users/joern/StudioProjects/HueTV/keystore.jks')
             storePassword 'password'
         }
     }
