@@ -1,9 +1,7 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,7 +24,7 @@ import java.util.List;
 public class BridgeActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private PHHueSDK phHueSDK;
-    public static final String TAG = "PhilipsHueAndroidTV";
+    public static final String TAG = "HueTV";
     private HueSharedPreferences prefs;
     private AccessPointListAdapter adapter;
     private boolean lastSearchWasIPScan = false;
@@ -36,7 +34,7 @@ public class BridgeActivity extends Activity implements AdapterView.OnItemClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
         phHueSDK = PHHueSDK.create();
-        phHueSDK.setAppName("PhilipsHueAndroidTV");
+        phHueSDK.setAppName("HueTV");
         phHueSDK.setDeviceName(android.os.Build.MODEL);
         phHueSDK.getNotificationManager().registerSDKListener(listener);
         adapter = new AccessPointListAdapter(getApplicationContext(), phHueSDK.getAccessPointsFound());

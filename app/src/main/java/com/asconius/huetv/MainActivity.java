@@ -1,4 +1,4 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,8 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.asconius.philipshueandroidtv.event.ImageRequestEvent;
-import com.asconius.philipshueandroidtv.event.ScheduleJobEvent;
+import com.asconius.huetv.event.ImageRequestEvent;
+import com.asconius.huetv.event.ScheduleJobEvent;
 import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class MainActivity extends Activity {
 
-    public static final String TAG = "PhilipsHueAndroidTV";
+    public static final String TAG = "HueTV";
     private MediaProjection mediaProjection;
     private MediaProjectionManager mediaProjectionManager;
     private ImageReader imageReader;

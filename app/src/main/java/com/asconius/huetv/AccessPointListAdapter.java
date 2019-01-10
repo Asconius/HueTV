@@ -1,4 +1,4 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,7 +17,7 @@ public class AccessPointListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<PHAccessPoint> accessPoints;
 
-    class BridgeListItem {
+    private class BridgeListItem {
         private TextView bridgeIp;
         private TextView bridgeMac;
     }
@@ -32,8 +32,8 @@ public class AccessPointListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.selectbridge_item, null);
             item = new BridgeListItem();
-            item.bridgeMac = (TextView) convertView.findViewById(R.id.bridge_mac);
-            item.bridgeIp = (TextView) convertView.findViewById(R.id.bridge_ip);
+            item.bridgeMac = convertView.findViewById(R.id.bridge_mac);
+            item.bridgeIp = convertView.findViewById(R.id.bridge_ip);
             convertView.setTag(item);
         } else {
             item = (BridgeListItem) convertView.getTag();

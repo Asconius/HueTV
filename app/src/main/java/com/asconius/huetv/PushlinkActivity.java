@@ -1,9 +1,8 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 

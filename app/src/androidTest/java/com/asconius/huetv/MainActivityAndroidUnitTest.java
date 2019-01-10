@@ -1,4 +1,4 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

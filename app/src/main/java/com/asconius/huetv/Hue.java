@@ -1,4 +1,4 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import com.philips.lighting.hue.sdk.utilities.impl.Color;
 

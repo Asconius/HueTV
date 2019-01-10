@@ -1,4 +1,4 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,8 +8,8 @@ public class HueSharedPreferences {
     private static final String LAST_CONNECTED_USERNAME = "LastConnectedUsername";
     private static final String LAST_CONNECTED_IP = "LastConnectedIP";
     private static HueSharedPreferences instance = null;
-    private SharedPreferences mSharedPreferences = null;
-    private SharedPreferences.Editor mSharedPreferencesEditor = null;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mSharedPreferencesEditor;
 
     public static HueSharedPreferences getInstance(Context ctx) {
         if (instance == null) {
@@ -24,8 +24,7 @@ public class HueSharedPreferences {
     }
 
     public String getUsername() {
-        String username = mSharedPreferences.getString(LAST_CONNECTED_USERNAME, "");
-        return username;
+        return mSharedPreferences.getString(LAST_CONNECTED_USERNAME, "");
     }
 
     public boolean setUsername(String username) {

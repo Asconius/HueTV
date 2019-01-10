@@ -1,4 +1,4 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.app.Activity;
 import android.app.AlertDialog;

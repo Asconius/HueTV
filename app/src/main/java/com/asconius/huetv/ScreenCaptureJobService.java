@@ -1,11 +1,11 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.util.Log;
 
-import com.asconius.philipshueandroidtv.event.ImageRequestEvent;
-import com.asconius.philipshueandroidtv.event.ScheduleJobEvent;
+import com.asconius.huetv.event.ImageRequestEvent;
+import com.asconius.huetv.event.ScheduleJobEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

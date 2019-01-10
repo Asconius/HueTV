@@ -5,13 +5,13 @@ android {
         config {
             keyAlias 'key0'
             keyPassword 'password'
-            storeFile file('C:/Users/joern/StudioProjects/HueTV/keystore.jks')
+            storeFile file('keystore.jks')
             storePassword 'password'
         }
     }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.asconius.philipshueandroidtv"
+        applicationId "com.asconius.huetv"
         minSdkVersion 24
         targetSdkVersion 28
         versionCode 1

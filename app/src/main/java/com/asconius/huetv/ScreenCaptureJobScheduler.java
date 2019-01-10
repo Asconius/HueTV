@@ -1,4 +1,4 @@
-package com.asconius.philipshueandroidtv;
+package com.asconius.huetv;
 
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
