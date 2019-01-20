@@ -2,7 +2,7 @@ package com.asconius.huetv;
 
 import com.philips.lighting.hue.sdk.utilities.impl.Color;
 
-public class Hue {
+public class HSB {
 
     private static final float HUE_MAX = 65535f;
     private static final float SATURATION_MAX = 254f;
@@ -11,7 +11,7 @@ public class Hue {
     private float saturation;
     private float brightness;
 
-    public Hue(int color) {
+    public HSB(int color) {
         hue = Color.hue(color);
         saturation = Color.saturation(color);
         brightness = Color.brightness(color);

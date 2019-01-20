@@ -142,16 +142,16 @@ public class MainActivity extends Activity {
             List<Palette.Swatch> swatchList = palette.getSwatches();
             Iterator<Palette.Swatch> iterator = swatchList.iterator();
             for (PHLight light : allLights) {
-                Hue hue = null;
+                HSB hsb = null;
                 if (iterator.hasNext()) {
                     Palette.Swatch swatch = iterator.next();
-                    hue = new Hue(swatch.getRgb());
+                    hsb = new HSB(swatch.getRgb());
                 }
-                if (hue != null) {
+                if (hsb != null) {
                     PHLightState lightState = new PHLightState();
-                    lightState.setHue(hue.getHue());
-                    lightState.setSaturation(hue.getSaturation());
-                    lightState.setBrightness(hue.getBrightness());
+                    lightState.setHue(hsb.getHue());
+                    lightState.setSaturation(hsb.getSaturation());
+                    lightState.setBrightness(hsb.getBrightness());
                     bridge.updateLightState(light, lightState, listener);
                 }
             }
