@@ -1,99 +1,101 @@
-package com.asconius.huetv.huesdk.impl;
+package com.asconius.huetv;
 
-import com.asconius.huetv.huesdk.intf.AccessPoint;
-import com.asconius.huetv.huesdk.intf.Bridge;
 import com.asconius.huetv.huesdk.intf.HueSDK;
-import com.asconius.huetv.huesdk.intf.NotificationManager;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
-import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHNotificationManager;
 import com.philips.lighting.model.PHBridge;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HueSDKImpl implements HueSDK {
+import javax.inject.Inject;
 
-    private PHHueSDK phHueSDK = PHHueSDK.create();
+public class HueSDKDecorator implements HueSDK {
+
+    private HueSDK hueSDK;
+
+    @Inject
+    public HueSDKDecorator(HueSDK hueSDK) {
+        this.hueSDK = hueSDK;
+    }
 
     @Override
     public void setAppName(String appName) {
-        phHueSDK.setAppName(appName);
+        hueSDK.setAppName(appName);
     }
 
     @Override
     public void setDeviceName(String deviceName) {
-        phHueSDK.setDeviceName(deviceName);
+        hueSDK.setDeviceName(deviceName);
     }
 
     @Override
     public PHNotificationManager getNotificationManager() {
-        return phHueSDK.getNotificationManager();
+        return hueSDK.getNotificationManager();
     }
 
     @Override
     public void connect(PHAccessPoint accessPoint) {
-        phHueSDK.connect(accessPoint);
+        hueSDK.connect(accessPoint);
     }
 
     @Override
     public boolean disconnect(PHBridge bridge) {
-        return phHueSDK.disconnect(bridge);
+        return hueSDK.disconnect(bridge);
     }
 
     @Override
     public List<PHAccessPoint> getDisconnectedAccessPoint() {
-        return phHueSDK.getDisconnectedAccessPoint();
+        return hueSDK.getDisconnectedAccessPoint();
     }
 
     @Override
     public PHBridge getSelectedBridge() {
-        return phHueSDK.getSelectedBridge();
+        return hueSDK.getSelectedBridge();
     }
 
     @Override
     public boolean isAccessPointConnected(PHAccessPoint accessPoint) {
-        return phHueSDK.isAccessPointConnected(accessPoint);
+        return hueSDK.isAccessPointConnected(accessPoint);
     }
 
     @Override
     public void disableAllHeartbeat() {
-        phHueSDK.disableAllHeartbeat();
+        hueSDK.disableAllHeartbeat();
     }
 
     @Override
     public void disableHeartbeat(PHBridge bridge) {
-        phHueSDK.disableHeartbeat(bridge);
+        hueSDK.disableHeartbeat(bridge);
     }
 
     @Override
     public void enableHeartbeat(PHBridge bridge, long time) {
-        phHueSDK.enableHeartbeat(bridge, time);
+        hueSDK.enableHeartbeat(bridge, time);
     }
 
     @Override
     public Map<String, Long> getLastHeartbeat() {
-        return phHueSDK.getLastHeartbeat();
+        return hueSDK.getLastHeartbeat();
     }
 
     @Override
     public Object getSDKService(byte msgType) {
-        return phHueSDK.getSDKService(msgType);
+        return hueSDK.getSDKService(msgType);
     }
 
     @Override
     public List<PHAccessPoint> getAccessPointsFound() {
-        return phHueSDK.getAccessPointsFound();
+        return hueSDK.getAccessPointsFound();
     }
 
     @Override
     public void setSelectedBridge(PHBridge selectedBridge) {
-        phHueSDK.setSelectedBridge(selectedBridge);
+        hueSDK.setSelectedBridge(selectedBridge);
     }
 
     @Override
     public void startPushlinkAuthentication(PHAccessPoint accessPoint) {
-        phHueSDK.startPushlinkAuthentication(accessPoint);
+        hueSDK.startPushlinkAuthentication(accessPoint);
     }
 }

@@ -35,13 +35,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends Activity {
+public class MainActivity extends HueActivity {
 
     public static final String TAG = "HueTV";
     private MediaProjection mediaProjection;
     private MediaProjectionManager mediaProjectionManager;
     private ImageReader imageReader;
-    private PHHueSDK phHueSDK;
     private boolean isServiceRunning = false;
     private Button startButton;
     private Button stopButton;
@@ -64,15 +63,10 @@ public class MainActivity extends Activity {
         stopButton.setEnabled(false);
     }
 
-    public PHHueSDK getPhHueSDK() {
-        return phHueSDK;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        phHueSDK = PHHueSDK.create();
         mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         EventBus.getDefault().register(this);
         startButton = findViewById(R.id.startButton);
@@ -136,7 +130,7 @@ public class MainActivity extends Activity {
     }
 
     public void updateLightState(Palette palette) {
-        PHBridge bridge = phHueSDK.getSelectedBridge();
+        PHBridge bridge = hueSDKDecorator.getSelectedBridge();
         if (bridge != null) {
             List<PHLight> allLights = bridge.getResourceCache().getAllLights();
             List<Palette.Swatch> swatchList = palette.getSwatches();

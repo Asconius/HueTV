@@ -1,4 +1,4 @@
-package com.asconius.huetv;
+package com.asconius.huetv.stub;
 
 import com.philips.lighting.hue.listener.PHBridgeConfigurationListener;
 import com.philips.lighting.hue.listener.PHGroupListener;
@@ -73,7 +73,12 @@ public class PHBridgeStub implements PHBridge {
 
             @Override
             public PHBridgeConfiguration getBridgeConfiguration() {
-                return null;
+                return new PHBridgeConfiguration() {
+                    @Override
+                    public String getIpAddress() {
+                        return "192.168.0.1";
+                    }
+                };
             }
 
             @Override

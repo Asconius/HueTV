@@ -1,5 +1,9 @@
 package com.asconius.huetv.huesdk.intf;
 
+import com.philips.lighting.hue.sdk.PHAccessPoint;
+import com.philips.lighting.hue.sdk.PHNotificationManager;
+import com.philips.lighting.model.PHBridge;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,31 +16,31 @@ public interface HueSDK {
 
     void setDeviceName(String deviceName);
 
-    NotificationManager getNotificationManager();
+    PHNotificationManager getNotificationManager();
 
-    void connect(AccessPoint accessPoint);
+    void connect(PHAccessPoint accessPoint);
 
-    boolean disconnect(Bridge bridge);
+    boolean disconnect(PHBridge bridge);
 
-    List<AccessPoint> getDisconnectedAccessPoint();
+    List<PHAccessPoint> getDisconnectedAccessPoint();
 
-    Bridge getSelectedBridge();
+    PHBridge getSelectedBridge();
 
-    boolean isAccessPointConnected(AccessPoint accessPoint);
+    boolean isAccessPointConnected(PHAccessPoint accessPoint);
 
     void disableAllHeartbeat();
 
-    void disableHeartbeat(Bridge bridge);
+    void disableHeartbeat(PHBridge bridge);
 
-    void enableHeartbeat(Bridge bridge, long time);
+    void enableHeartbeat(PHBridge bridge, long time);
 
     Map<String, Long> getLastHeartbeat();
 
     Object getSDKService(byte msgType);
 
-    List<AccessPoint> getAccessPointsFound();
+    List<PHAccessPoint> getAccessPointsFound();
 
-    void setSelectedBridge(Bridge selectedBridge);
+    void setSelectedBridge(PHBridge selectedBridge);
 
-    void startPushlinkAuthentication(AccessPoint accessPoint);
+    void startPushlinkAuthentication(PHAccessPoint accessPoint);
 }

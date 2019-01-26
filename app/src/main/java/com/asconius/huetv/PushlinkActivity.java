@@ -1,13 +1,11 @@
 package com.asconius.huetv;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 
 import com.philips.lighting.hue.sdk.PHAccessPoint;
-import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHMessageType;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
@@ -15,11 +13,10 @@ import com.philips.lighting.model.PHHueParsingError;
 
 import java.util.List;
 
-public class PushlinkActivity extends Activity {
+public class PushlinkActivity extends HueActivity {
 
     private ProgressBar pbar;
     private static final int MAX_TIME = 30;
-    private PHHueSDK phHueSDK;
     private boolean isDialogShowing;
 
     @Override
@@ -28,18 +25,17 @@ public class PushlinkActivity extends Activity {
         setContentView(R.layout.activity_pushlink);
         setTitle(R.string.txt_pushlink);
         isDialogShowing=false;
-        phHueSDK = PHHueSDK.getInstance();
 
         pbar = findViewById(R.id.progressBar);
         pbar.setMax(MAX_TIME);
 
-        phHueSDK.getNotificationManager().registerSDKListener(listener);
+        hueSDKDecorator.getNotificationManager().registerSDKListener(listener);
     }
 
     @Override
     protected void onStop(){
         super.onStop();
-        phHueSDK.getNotificationManager().unregisterSDKListener(listener);
+        hueSDKDecorator.getNotificationManager().unregisterSDKListener(listener);
     }
 
     public void incrementProgress() {
@@ -101,7 +97,7 @@ public class PushlinkActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         if (listener !=null) {
-            phHueSDK.getNotificationManager().unregisterSDKListener(listener);
+            hueSDKDecorator.getNotificationManager().unregisterSDKListener(listener);
         }
     }
 }

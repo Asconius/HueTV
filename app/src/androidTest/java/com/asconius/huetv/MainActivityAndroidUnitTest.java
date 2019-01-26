@@ -9,6 +9,7 @@ import android.support.test.uiautomator.UiSelector;
 import android.support.v7.graphics.Palette;
 import android.util.Base64;
 
+import com.asconius.huetv.stub.PHBridgeStub;
 import com.philips.lighting.hue.sdk.utilities.impl.Color;
 import com.philips.lighting.model.PHLightState;
 
@@ -34,12 +35,20 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityAndroidUnitTest {
+public class MainActivityAndroidUnitTest extends AndroidUnitTest {
 
     private static final String IMAGE = "iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAJOgAACToAYJjBRwAAAAjSURBVChTY3gro4KM/n9iQEYDKs2w6AUyUtrog4wGTnqjDwC/x5Bw50Z6RAAAAABJRU5ErkJggg";
 
     @Rule
-    public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
+        @Override
+        protected void beforeActivityLaunched() {
+            clearSharedPrefs(InstrumentationRegistry.getInstrumentation().getTargetContext());
+            super.beforeActivityLaunched();
+
+            inject();
+        }
+    };
 
     @Test
     public void createPalette() {
@@ -60,9 +69,7 @@ public class MainActivityAndroidUnitTest {
 
     @Test
     public void updateLightState() {
-        PHBridgeStub phBridge = new PHBridgeStub();
-        MainActivity mainActivity = mainActivityActivityTestRule.getActivity();
-        mainActivity.getPhHueSDK().setSelectedBridge(phBridge);
+        MainActivity mainActivity = activityRule.getActivity();
 
         byte[] data = Base64.decode(IMAGE, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -75,7 +82,7 @@ public class MainActivityAndroidUnitTest {
         List<Float> brightnessList = Arrays.asList(90.94488f, 68.897644f, 90.94488f, 97.244095f);
         List<Iterator<Float>> iteratorList = Arrays.asList(hueList.iterator(), saturationList.iterator(), brightnessList.iterator());
 
-        for (PHLightState lightState : phBridge.getLightStateList()) {
+        for (PHLightState lightState : ((PHBridgeStub)hueSDK.getSelectedBridge()).getLightStateList()) {
             assertThat(lightState.getHue() / 65535f * 360f).isEqualTo(iteratorList.get(0).next());
             assertThat(lightState.getSaturation() / 254f * 100f).isEqualTo(iteratorList.get(1).next());
             assertThat(lightState.getBrightness() / 254f * 100f).isEqualTo(iteratorList.get(2).next());
@@ -83,14 +90,12 @@ public class MainActivityAndroidUnitTest {
     }
 
     @Test
-    public void integration() throws UiObjectNotFoundException {
+    public void mainActivity() throws UiObjectNotFoundException {
         long waitingTime = 10000;
         IdlingPolicies.setMasterPolicyTimeout(waitingTime * 2, TimeUnit.MILLISECONDS);
         IdlingPolicies.setIdlingResourceTimeout(waitingTime * 2, TimeUnit.MILLISECONDS);
 
-        PHBridgeStub phBridge = new PHBridgeStub();
-        MainActivity mainActivity = mainActivityActivityTestRule.getActivity();
-        mainActivity.getPhHueSDK().setSelectedBridge(phBridge);
+        MainActivity mainActivity = activityRule.getActivity();
 
         onView(withId(R.id.authorizeButton)).perform(click());
         UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -106,7 +111,7 @@ public class MainActivityAndroidUnitTest {
         IdlingRegistry.getInstance().unregister(idlingResource);
         onView(withId(R.id.stopButton)).perform(click());
 
-        for (PHLightState lightState : phBridge.getLightStateList()) {
+        for (PHLightState lightState : ((PHBridgeStub)hueSDK.getSelectedBridge()).getLightStateList()) {
             assertThat(lightState.getHue()).isEqualTo(0);
             assertThat(lightState.getSaturation()).isEqualTo(0);
             assertThat(lightState.getBrightness()).isAnyOf(31,39, 47, 55, 63, 79, 87);

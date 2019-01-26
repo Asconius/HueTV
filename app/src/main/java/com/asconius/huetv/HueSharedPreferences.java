@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class HueSharedPreferences {
-    private static final String HUE_SHARED_PREFERENCES_STORE = "HueSharedPrefs";
+    public static final String HUE_SHARED_PREFERENCES_STORE = "HueSharedPrefs";
     private static final String LAST_CONNECTED_USERNAME = "LastConnectedUsername";
     private static final String LAST_CONNECTED_IP = "LastConnectedIP";
     private static HueSharedPreferences instance = null;
