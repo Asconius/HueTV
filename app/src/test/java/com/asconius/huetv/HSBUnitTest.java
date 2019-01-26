@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 
-public class HSBTest {
+public class HSBUnitTest {
 
     private static final int HUE_MAX = 65535;
     private static final int HUE_MIN = 0;

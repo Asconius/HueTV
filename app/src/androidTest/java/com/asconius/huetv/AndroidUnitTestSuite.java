@@ -10,5 +10,4 @@ import org.junit.runners.Suite;
         MainActivityAndroidUnitTest.class,
         PushlinkActivityAndroidUnitTest.class
 })
-public class UnitTestSuite {
-}
+public class AndroidUnitTestSuite { }
