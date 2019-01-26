@@ -9,6 +9,8 @@ import javax.inject.Inject;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import static com.asconius.huetv.HueSharedPreferences.HUE_SHARED_PREFERENCES_STORE;
+
 public class AndroidUnitTest {
 
     @Inject
@@ -25,7 +27,7 @@ public class AndroidUnitTest {
     }
 
     protected void clearSharedPrefs(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(HueSharedPreferences.HUE_SHARED_PREFERENCES_STORE, Context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences(HUE_SHARED_PREFERENCES_STORE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();
         editor.commit();

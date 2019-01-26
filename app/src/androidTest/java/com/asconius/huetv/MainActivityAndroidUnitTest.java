@@ -31,6 +31,8 @@ import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.google.common.truth.Truth.assertThat;
 
@@ -95,8 +97,9 @@ public class MainActivityAndroidUnitTest extends AndroidUnitTest {
         IdlingPolicies.setMasterPolicyTimeout(waitingTime * 2, TimeUnit.MILLISECONDS);
         IdlingPolicies.setIdlingResourceTimeout(waitingTime * 2, TimeUnit.MILLISECONDS);
 
-        MainActivity mainActivity = activityRule.getActivity();
-
+        onView(withId(R.id.authorizeButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.startButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.stopButton)).check(matches(isDisplayed()));
         onView(withId(R.id.authorizeButton)).perform(click());
         UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         UiObject button = uiDevice.findObject(new UiSelector().text("START NOW"));

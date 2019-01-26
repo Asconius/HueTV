@@ -1,6 +1,5 @@
 package com.asconius.huetv.stub;
 
-import com.asconius.huetv.huesdk.intf.AccessPoint;
 import com.asconius.huetv.huesdk.intf.HueSDK;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
@@ -8,7 +7,6 @@ import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHNotificationManager;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
-import com.philips.lighting.model.PHHueParsingError;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,47 +16,45 @@ import java.util.Map;
 
 public class HueSDKStub implements HueSDK {
 
-    private PHSDKListener phsdkListener;
+    private List<PHSDKListener> phsdkListenerList = new ArrayList<>();
     private List<PHAccessPoint> phAccessPointList = new ArrayList<>();
     private PHBridge phBridge = new PHBridgeStub();
 
-    public PHSDKListener getPhsdkListener() {
-        return phsdkListener;
+    public List<PHSDKListener> getPhsdkListenerList() {
+        return phsdkListenerList;
     }
 
     @Override
-    public void setAppName(String appName) {
-
-    }
+    public void setAppName(String appName) { }
 
     @Override
-    public void setDeviceName(String deviceName) {
-
-    }
+    public void setDeviceName(String deviceName) { }
 
     @Override
     public PHNotificationManager getNotificationManager() {
         return new PHNotificationManager() {
             @Override
             public void registerSDKListener(PHSDKListener phsdkListener) {
-                HueSDKStub.this.phsdkListener = phsdkListener;
+                HueSDKStub.this.phsdkListenerList.add(phsdkListener);
             }
 
             @Override
-            public void unregisterSDKListener(PHSDKListener phsdkListener) {
-
-            }
+            public void unregisterSDKListener(PHSDKListener phsdkListener) { }
 
             @Override
-            public void cancelSearchNotification() {
-
-            }
+            public void cancelSearchNotification() { }
         };
     }
 
     @Override
     public void connect(PHAccessPoint accessPoint) {
-        phsdkListener.onBridgeConnected(new PHBridgeStub(), "User 1");
+        for (PHSDKListener phsdkListener : phsdkListenerList) {
+            if ("192.168.0.1".equals(accessPoint.getIpAddress())) {
+                phsdkListener.onAuthenticationRequired(accessPoint);
+            } else if ("192.168.0.2".equals(accessPoint.getIpAddress())) {
+                phsdkListener.onBridgeConnected(new PHBridgeStub(), "User 1");
+            }
+        }
     }
 
     @Override
@@ -82,19 +78,13 @@ public class HueSDKStub implements HueSDK {
     }
 
     @Override
-    public void disableAllHeartbeat() {
-
-    }
+    public void disableAllHeartbeat() { }
 
     @Override
-    public void disableHeartbeat(PHBridge bridge) {
-
-    }
+    public void disableHeartbeat(PHBridge bridge) { }
 
     @Override
-    public void enableHeartbeat(PHBridge bridge, long time) {
-
-    }
+    public void enableHeartbeat(PHBridge bridge, long time) { }
 
     @Override
     public Map<String, Long> getLastHeartbeat() {
@@ -105,41 +95,31 @@ public class HueSDKStub implements HueSDK {
     public Object getSDKService(byte msgType) {
         if(msgType == PHHueSDK.SEARCH_BRIDGE) {
             return new PHBridgeSearchManager() {
-
                 @Override
                 public void search(boolean b, boolean b1) {
-                    PHAccessPoint phAccessPoint1 = new PHAccessPoint("192.168.0.1", "User 1", "mac 1");
-                    PHAccessPoint phAccessPoint2 = new PHAccessPoint("192.168.0.2", "User 2", "mac 2");
-                    PHAccessPoint phAccessPoint3 = new PHAccessPoint("192.168.0.3", "User 3", "mac 3");
-                    PHAccessPoint phAccessPoint4 = new PHAccessPoint("192.168.0.4", "User 4", "mac 4");
-
-                    phsdkListener.onAccessPointsFound(Arrays.asList(phAccessPoint1, phAccessPoint2, phAccessPoint3, phAccessPoint4));
+                    PHAccessPoint phAccessPoint1 = new PHAccessPoint("192.168.0.1", "User 1", "Mac 1");
+                    PHAccessPoint phAccessPoint2 = new PHAccessPoint("192.168.0.2", "User 2", "Mac 2");
+                    PHAccessPoint phAccessPoint3 = new PHAccessPoint("192.168.0.3", "User 3", "Mac 3");
+                    PHAccessPoint phAccessPoint4 = new PHAccessPoint("192.168.0.4", "User 4", "Mac 4");
+                    for (PHSDKListener phsdkListener: phsdkListenerList) {
+                        phsdkListener.onAccessPointsFound(Arrays.asList(phAccessPoint1, phAccessPoint2, phAccessPoint3, phAccessPoint4));
+                    }
                 }
 
                 @Override
-                public void search(boolean b, boolean b1, boolean b2) {
-
-                }
+                public void search(boolean b, boolean b1, boolean b2) { }
 
                 @Override
-                public void upnpSearch() {
-
-                }
+                public void upnpSearch() { }
 
                 @Override
-                public void portalSearch() {
-
-                }
+                public void portalSearch() { }
 
                 @Override
-                public void ipAddressSearch() {
-
-                }
+                public void ipAddressSearch() { }
 
                 @Override
-                public void setPortalAddress(String s) {
-
-                }
+                public void setPortalAddress(String s) { }
 
                 @Override
                 public String getPortalAddress() {
@@ -156,12 +136,8 @@ public class HueSDKStub implements HueSDK {
     }
 
     @Override
-    public void setSelectedBridge(PHBridge selectedBridge) {
-
-    }
+    public void setSelectedBridge(PHBridge selectedBridge) { }
 
     @Override
-    public void startPushlinkAuthentication(PHAccessPoint accessPoint) {
-
-    }
+    public void startPushlinkAuthentication(PHAccessPoint accessPoint) { }
 }

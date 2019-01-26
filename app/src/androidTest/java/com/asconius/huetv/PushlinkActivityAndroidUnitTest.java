@@ -1,7 +1,9 @@
 package com.asconius.huetv;
 
 import com.asconius.huetv.stub.HueSDKStub;
+import com.asconius.huetv.stub.PHBridgeStub;
 import com.philips.lighting.hue.sdk.PHMessageType;
+import com.philips.lighting.hue.sdk.PHSDKListener;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,7 +47,12 @@ public class PushlinkActivityAndroidUnitTest extends AndroidUnitTest {
         IdlingRegistry.getInstance().register(idlingResource);
 
         onView(withId(R.id.textView)).check(matches(isDisplayed()));
-        ((HueSDKStub)hueSDK).getPhsdkListener().onError(PHMessageType.PUSHLINK_AUTHENTICATION_FAILED, "Message");
+        onView(withId(R.id.imageView)).check(matches(isDisplayed()));
+        onView(withId(R.id.progressBar)).check(matches(isDisplayed()));
+
+        for (PHSDKListener listener : ((HueSDKStub)hueSDK).getPhsdkListenerList()) {
+            listener.onError(PHMessageType.PUSHLINK_AUTHENTICATION_FAILED, "Message");
+        }
 
         IdlingRegistry.getInstance().unregister(idlingResource);
     }
