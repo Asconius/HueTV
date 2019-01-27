@@ -39,9 +39,7 @@ public class AccessPointListAdapter extends BaseAdapter {
             item = (BridgeListItem) convertView.getTag();
         }
         PHAccessPoint accessPoint = accessPoints.get(position);
-        item.bridgeIp.setTextColor(Color.BLACK);
         item.bridgeIp.setText(accessPoint.getIpAddress());
-        item.bridgeMac.setTextColor(Color.DKGRAY);
         item.bridgeMac.setText(accessPoint.getMacAddress());
         return convertView;
     }
