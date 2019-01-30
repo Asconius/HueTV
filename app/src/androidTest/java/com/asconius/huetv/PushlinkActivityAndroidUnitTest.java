@@ -16,9 +16,12 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class PushlinkActivityAndroidUnitTest extends AndroidUnitTest {
 
@@ -49,6 +52,8 @@ public class PushlinkActivityAndroidUnitTest extends AndroidUnitTest {
         for (PHSDKListener listener : ((HueSDKStub)hueSDK).getPhsdkListenerList()) {
             listener.onError(PHMessageType.PUSHLINK_AUTHENTICATION_FAILED, "Message");
         }
+
+        onView(withText("OK")).inRoot(isDialog()).check(matches(isDisplayed())).perform(pressBack());
 
         IdlingRegistry.getInstance().unregister(idlingResource);
     }
