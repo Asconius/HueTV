@@ -1,7 +1,6 @@
 package com.asconius.huetv;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class AccessPointListAdapter extends BaseAdapter {
 
-    private LayoutInflater mInflater;
+    private final LayoutInflater mInflater;
     private List<PHAccessPoint> accessPoints;
 
     private class BridgeListItem {

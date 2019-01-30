@@ -5,7 +5,7 @@ import com.philips.lighting.model.PHLightState;
 
 public class LightStateImpl implements LightState {
 
-    private PHLightState phLightState = new PHLightState();
+    private final PHLightState phLightState = new PHLightState();
 
     public PHLightState getPhLightState() {
         return phLightState;

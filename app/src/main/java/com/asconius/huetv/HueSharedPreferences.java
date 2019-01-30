@@ -8,8 +8,8 @@ public class HueSharedPreferences {
     public static final String LAST_CONNECTED_USERNAME = "LastConnectedUsername";
     public static final String LAST_CONNECTED_IP = "LastConnectedIP";
     private static HueSharedPreferences instance = null;
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mSharedPreferencesEditor;
+    private final SharedPreferences mSharedPreferences;
+    private final SharedPreferences.Editor mSharedPreferencesEditor;
 
     public static HueSharedPreferences getInstance(Context ctx) {
         if (instance == null) {

@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class HueSDKStub implements HueSDK {
 
-    private List<PHSDKListener> phsdkListenerList = new ArrayList<>();
-    private List<PHAccessPoint> phAccessPointList = new ArrayList<>();
-    private PHBridge phBridge = new PHBridgeStub();
+    private final List<PHSDKListener> phsdkListenerList = new ArrayList<>();
+    private final List<PHAccessPoint> phAccessPointList = new ArrayList<>();
+    private final PHBridge phBridge = new PHBridgeStub();
 
     public List<PHSDKListener> getPhsdkListenerList() {
         return phsdkListenerList;

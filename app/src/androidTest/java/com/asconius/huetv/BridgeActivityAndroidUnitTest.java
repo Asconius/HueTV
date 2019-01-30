@@ -1,16 +1,12 @@
 package com.asconius.huetv;
 
-import android.os.SystemClock;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 
-import com.asconius.huetv.huesdk.intf.HueSDK;
 import com.asconius.huetv.stub.HueSDKStub;
 import com.asconius.huetv.stub.PHBridgeStub;
-import com.philips.lighting.hue.sdk.PHAccessPoint;
-import com.philips.lighting.hue.sdk.PHMessageType;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHLightState;
 
@@ -18,8 +14,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
 
 import androidx.test.espresso.IdlingPolicies;
 import androidx.test.espresso.IdlingRegistry;

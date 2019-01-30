@@ -28,8 +28,8 @@ import java.util.Map;
 
 public class PHBridgeStub implements PHBridge {
 
-    private List<PHLight> lightList;
-    private List<PHLightState> lightStateList = new ArrayList<>();
+    private final List<PHLight> lightList;
+    private final List<PHLightState> lightStateList = new ArrayList<>();
 
     public PHBridgeStub() {
         PHLight phLight1 = new PHLight("light1", "1", "", "");

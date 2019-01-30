@@ -7,9 +7,9 @@ public class HSB {
     private static final float HUE_MAX = 65535f;
     private static final float SATURATION_MAX = 254f;
     private static final float BRIGHTNESS_MAX = 254f;
-    private float hue;
-    private float saturation;
-    private float brightness;
+    private final float hue;
+    private final float saturation;
+    private final float brightness;
 
     public HSB(int color) {
         hue = Color.hue(color);

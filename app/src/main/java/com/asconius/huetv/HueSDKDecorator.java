@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 public class HueSDKDecorator implements HueSDK {
 
-    private HueSDK hueSDK;
+    private final HueSDK hueSDK;
 
     @Inject
     public HueSDKDecorator(HueSDK hueSDK) {

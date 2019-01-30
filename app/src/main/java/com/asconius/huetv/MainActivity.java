@@ -1,6 +1,5 @@
 package com.asconius.huetv;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,7 +19,6 @@ import android.widget.Button;
 import com.asconius.huetv.event.ImageRequestEvent;
 import com.asconius.huetv.event.ScheduleJobEvent;
 import com.philips.lighting.hue.listener.PHLightListener;
-import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHBridgeResource;
 import com.philips.lighting.model.PHHueError;
@@ -37,7 +35,7 @@ import java.util.Map;
 
 public class MainActivity extends HueActivity {
 
-    public static final String TAG = "HueTV";
+    private static final String TAG = "HueTV";
     private MediaProjection mediaProjection;
     private MediaProjectionManager mediaProjectionManager;
     private ImageReader imageReader;
@@ -120,7 +118,7 @@ public class MainActivity extends HueActivity {
         }
     }
 
-    public void createPaletteAsync(Bitmap bitmap) {
+    private void createPaletteAsync(Bitmap bitmap) {
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
                 Log.d("onGenerated", "MainActivity.PaletteAsyncListener.onGenerated");
@@ -178,7 +176,7 @@ public class MainActivity extends HueActivity {
                 imageReader.getSurface(), null, null);
     }
 
-    PHLightListener listener = new PHLightListener() {
+    private final PHLightListener listener = new PHLightListener() {
 
         @Override
         public void onSuccess() {}

@@ -22,7 +22,7 @@ import java.util.List;
 
 public class BridgeActivity extends HueActivity implements AdapterView.OnItemClickListener {
 
-    public static final String TAG = "HueTV";
+    private static final String TAG = "HueTV";
     private HueSharedPreferences prefs;
     private AccessPointListAdapter adapter;
     private boolean lastSearchWasIPScan = false;
@@ -76,9 +76,7 @@ public class BridgeActivity extends HueActivity implements AdapterView.OnItemCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (listener !=null) {
-            hueSDKDecorator.getNotificationManager().unregisterSDKListener(listener);
-        }
+        hueSDKDecorator.getNotificationManager().unregisterSDKListener(listener);
         hueSDKDecorator.disableAllHeartbeat();
     }
 
@@ -97,13 +95,13 @@ public class BridgeActivity extends HueActivity implements AdapterView.OnItemCli
         hueSDKDecorator.connect(accessPoint);
     }
 
-    public void doBridgeSearch() {
+    private void doBridgeSearch() {
         DialogFactory.getInstance().showProgressDialog(R.string.search_progress, BridgeActivity.this);
         PHBridgeSearchManager sm = (PHBridgeSearchManager) hueSDKDecorator.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         sm.search(true, true);
     }
 
-    public void startMainActivity() {
+    private void startMainActivity() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -111,12 +109,12 @@ public class BridgeActivity extends HueActivity implements AdapterView.OnItemCli
         startActivity(intent);
     }
 
-    private PHSDKListener listener = new PHSDKListener() {
+    private final PHSDKListener listener = new PHSDKListener() {
         @Override
         public void onAccessPointsFound(List<PHAccessPoint> accessPoint) {
             Log.w(TAG, "Access Points Found. " + accessPoint.size());
             DialogFactory.getInstance().closeProgressDialog();
-            if (accessPoint != null && accessPoint.size() > 0) {
+            if (accessPoint.size() > 0) {
                 hueSDKDecorator.getAccessPointsFound().clear();
                 hueSDKDecorator.getAccessPointsFound().addAll(accessPoint);
                 runOnUiThread(new Runnable() {

@@ -17,8 +17,8 @@ import java.util.Map;
 
 public class NotificationManagerImpl implements NotificationManager {
 
-    private PHNotificationManager phNotificationManager;
-    private Map<SDKListener, PHSDKListener> sdkListenerPHSDKListenerMap = new HashMap<>();
+    private final PHNotificationManager phNotificationManager;
+    private final Map<SDKListener, PHSDKListener> sdkListenerPHSDKListenerMap = new HashMap<>();
 
     public NotificationManagerImpl(PHNotificationManager phNotificationManager) {
         this.phNotificationManager = phNotificationManager;

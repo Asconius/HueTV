@@ -1,21 +1,17 @@
 package com.asconius.huetv.huesdk.impl;
 
-import com.asconius.huetv.huesdk.intf.AccessPoint;
-import com.asconius.huetv.huesdk.intf.Bridge;
 import com.asconius.huetv.huesdk.intf.HueSDK;
-import com.asconius.huetv.huesdk.intf.NotificationManager;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHNotificationManager;
 import com.philips.lighting.model.PHBridge;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class HueSDKImpl implements HueSDK {
 
-    private PHHueSDK phHueSDK = PHHueSDK.create();
+    private final PHHueSDK phHueSDK = PHHueSDK.create();
 
     @Override
     public void setAppName(String appName) {

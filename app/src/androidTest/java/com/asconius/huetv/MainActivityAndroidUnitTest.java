@@ -42,7 +42,7 @@ public class MainActivityAndroidUnitTest extends AndroidUnitTest {
     private static final String IMAGE = "iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAJOgAACToAYJjBRwAAAAjSURBVChTY3gro4KM/n9iQEYDKs2w6AUyUtrog4wGTnqjDwC/x5Bw50Z6RAAAAABJRU5ErkJggg";
 
     @Rule
-    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
+    public final ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
         @Override
         protected void beforeActivityLaunched() {
             clearSharedPrefs(InstrumentationRegistry.getInstrumentation().getTargetContext());

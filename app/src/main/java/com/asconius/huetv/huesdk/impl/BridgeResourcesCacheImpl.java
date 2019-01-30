@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BridgeResourcesCacheImpl implements BridgeResourcesCache {
 
-    private PHBridgeResourcesCache phBridgeResourcesCache;
+    private final PHBridgeResourcesCache phBridgeResourcesCache;
 
     public BridgeResourcesCacheImpl(PHBridgeResourcesCache phBridgeResourcesCache) {
         this.phBridgeResourcesCache = phBridgeResourcesCache;

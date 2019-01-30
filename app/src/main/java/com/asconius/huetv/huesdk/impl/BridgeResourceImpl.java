@@ -5,7 +5,7 @@ import com.philips.lighting.model.PHBridgeResource;
 
 public class BridgeResourceImpl implements BridgeResource {
 
-    private PHBridgeResource phBridgeResource;
+    private final PHBridgeResource phBridgeResource;
 
     public BridgeResourceImpl(PHBridgeResource phBridgeResource) {
         this.phBridgeResource = phBridgeResource;

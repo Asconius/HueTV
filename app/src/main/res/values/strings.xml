@@ -8,5 +8,7 @@
     <string name="connecting">Connecting…</string>
     <string name="search_progress">Searching…</string>
     <string name="menu_find_bridge">Find new Bridge</string>
-    <string name="menu_refresh">Refresh</string>
+    <string name="authorize">Authorize</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
 </resources>

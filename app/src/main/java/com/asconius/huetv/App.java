@@ -13,7 +13,7 @@ public class App extends Application {
         hueSDKComponent = createComponent();
     }
 
-    protected HueSDKComponent createComponent() {
+    private HueSDKComponent createComponent() {
         return DaggerHueSDKComponent.create();
     }
 

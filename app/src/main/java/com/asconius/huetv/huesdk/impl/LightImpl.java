@@ -5,7 +5,7 @@ import com.philips.lighting.model.PHLight;
 
 public class LightImpl implements Light {
 
-    private PHLight phLight;
+    private final PHLight phLight;
 
     public LightImpl(PHLight phLight) {
         this.phLight = phLight;

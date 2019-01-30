@@ -5,7 +5,7 @@ import com.philips.lighting.hue.sdk.PHAccessPoint;
 
 public class AccessPointImpl implements AccessPoint {
 
-    private PHAccessPoint phAccessPoint;
+    private final PHAccessPoint phAccessPoint;
 
     public AccessPointImpl() {
         phAccessPoint = new PHAccessPoint();

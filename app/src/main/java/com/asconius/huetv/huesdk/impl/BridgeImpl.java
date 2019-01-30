@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class BridgeImpl implements Bridge {
 
-    private PHBridge phBridge;
+    private final PHBridge phBridge;
 
     public BridgeImpl(PHBridge phBridge) {
         this.phBridge = phBridge;

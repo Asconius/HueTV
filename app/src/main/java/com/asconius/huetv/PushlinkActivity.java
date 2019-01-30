@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PushlinkActivity extends HueActivity {
 
-    private ProgressBar pbar;
+    private ProgressBar progressBar;
     private static final int MAX_TIME = 30;
     private boolean isDialogShowing;
 
@@ -26,8 +26,8 @@ public class PushlinkActivity extends HueActivity {
         setTitle(R.string.txt_pushlink);
         isDialogShowing=false;
 
-        pbar = findViewById(R.id.progressBar);
-        pbar.setMax(MAX_TIME);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setMax(MAX_TIME);
 
         hueSDKDecorator.getNotificationManager().registerSDKListener(listener);
     }
@@ -38,11 +38,11 @@ public class PushlinkActivity extends HueActivity {
         hueSDKDecorator.getNotificationManager().unregisterSDKListener(listener);
     }
 
-    public void incrementProgress() {
-        pbar.incrementProgressBy(1);
+    private void incrementProgress() {
+        progressBar.incrementProgressBy(1);
     }
 
-    private PHSDKListener listener = new PHSDKListener() {
+    private final PHSDKListener listener = new PHSDKListener() {
 
         @Override
         public void onAccessPointsFound(List<PHAccessPoint> arg0) {}
@@ -96,8 +96,6 @@ public class PushlinkActivity extends HueActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (listener !=null) {
-            hueSDKDecorator.getNotificationManager().unregisterSDKListener(listener);
-        }
+        hueSDKDecorator.getNotificationManager().unregisterSDKListener(listener);
     }
 }

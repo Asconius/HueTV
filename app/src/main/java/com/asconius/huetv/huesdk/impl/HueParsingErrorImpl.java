@@ -5,7 +5,7 @@ import com.philips.lighting.model.PHHueParsingError;
 
 public class HueParsingErrorImpl extends HueErrorImpl implements HueParsingError {
 
-    private PHHueParsingError phHueParsingError;
+    private final PHHueParsingError phHueParsingError;
 
     public HueParsingErrorImpl(PHHueParsingError phHueParsingError) {
         super(phHueParsingError.getCode(), phHueParsingError.getMessage(), phHueParsingError.getAddress());
