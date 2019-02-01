@@ -148,6 +148,7 @@ public class MainActivity extends HueActivity {
                 }
             }
         }
+        EventBus.getDefault().post(new ScheduleJobEvent());
     }
 
     public Bitmap convert(Image image) {

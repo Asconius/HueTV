@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
         BridgeActivityAndroidUnitTest.class,
         HueSharedPreferencesAndroidUnitTest.class,
         MainActivityAndroidUnitTest.class,
-        PushlinkActivityAndroidUnitTest.class
+        PushlinkActivityAndroidUnitTest.class,
+        AppAndroidUnitTest.class
 })
 public class AndroidUnitTestSuite { }

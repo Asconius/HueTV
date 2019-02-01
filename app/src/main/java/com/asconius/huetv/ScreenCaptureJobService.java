@@ -15,7 +15,6 @@ public class ScreenCaptureJobService extends JobService {
     public boolean onStartJob(JobParameters params) {
         Log.d("onStartJob", "ScreenCaptureJobService.onStartJob");
         EventBus.getDefault().post(new ImageRequestEvent());
-        EventBus.getDefault().post(new ScheduleJobEvent());
         return true;
     }
 
