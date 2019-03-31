@@ -10,9 +10,12 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.PixelCopy;
 import android.view.View;
 import android.widget.Button;
 
@@ -100,19 +103,19 @@ public class MainActivity extends HueActivity {
 
     private void captureImage() {
         if (mediaProjection != null) {
-            Log.d("captureImage", "MainActivity.captureImage mediaProjection != null");
+            Log.d(TAG, "MainActivity.captureImage mediaProjection != null");
             DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
             imageReader = ImageReader.newInstance(metrics.widthPixels, metrics.heightPixels, PixelFormat.RGBA_8888, 1);
-            imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-                @Override
-                public void onImageAvailable(ImageReader reader) {
-                    Image image = reader.acquireNextImage();
-                    Log.d("onImageAvailable", "MainActivity.OnImageAvailableListener.onImageAvailable " + image);
-                    Bitmap bitmap = Bitmap.createScaledBitmap(convert(image), 640, 360, false);
-                    createPaletteAsync(bitmap);
-                    image.close();
-                    reader.close();
-                }
+            imageReader.setOnImageAvailableListener(reader -> {
+                Log.d(TAG, "MainActivity.OnImageAvailableListener.onImageAvailable ");
+                Bitmap bitmap = Bitmap.createBitmap(640, 360, Bitmap.Config.ARGB_8888);
+                PixelCopy.request(reader.getSurface(), bitmap, copyResult -> {
+                    Log.d(TAG, "MainActivity.OnImageAvailableListener.onPixelCopyFinished " + copyResult);
+                    if (PixelCopy.SUCCESS == copyResult) {
+                        createPaletteAsync(bitmap);
+                    }
+                }, new Handler(Looper.getMainLooper()));
+                reader.close();
             }, null);
             createVirtualDisplay();
         }
@@ -149,23 +152,6 @@ public class MainActivity extends HueActivity {
             }
         }
         EventBus.getDefault().post(new ScheduleJobEvent());
-    }
-
-    public Bitmap convert(Image image) {
-        if(image == null) return null;
-        int width = image.getWidth();
-        int height = image.getHeight();
-        final Image.Plane[] planes = image.getPlanes();
-        final ByteBuffer buffer = planes[0].getBuffer();
-        int pixelStride = planes[0].getPixelStride();
-        int rowStride = planes[0].getRowStride();
-        int rowPadding = rowStride - pixelStride * width;
-        Bitmap bitmap = Bitmap.createBitmap(width + rowPadding / pixelStride, height, Bitmap.Config.ARGB_8888);
-        bitmap.copyPixelsFromBuffer(buffer);
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
-        Log.d("convert", "MainActivity.convert " + bitmap);
-        image.close();
-        return bitmap;
     }
 
     private void createVirtualDisplay() {

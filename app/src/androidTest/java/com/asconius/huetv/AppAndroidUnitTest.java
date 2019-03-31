@@ -16,6 +16,7 @@ import com.asconius.huetv.stub.PHBridgeStub;
 import com.google.common.truth.Truth;
 import com.philips.lighting.model.PHLightState;
 
+import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +27,10 @@ import java.util.List;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 @RunWith(AndroidJUnit4.class)
 public class AppAndroidUnitTest extends AndroidUnitTest {
@@ -53,9 +58,9 @@ public class AppAndroidUnitTest extends AndroidUnitTest {
     public void appAndroidUnitTest() {
         List<PHLightState> phLightStates = ((PHBridgeStub)hueSDK.getSelectedBridge()).getLightStateList();
         PHLightState lightState = phLightStates.get(phLightStates.size() - 1);
-        Truth.assertThat(lightState.getHue()).isEqualTo(10922);
-        Truth.assertThat(lightState.getSaturation()).isEqualTo(10);
-        Truth.assertThat(lightState.getBrightness()).isEqualTo(191);
+        MatcherAssert.assertThat(lightState.getHue(), allOf(greaterThanOrEqualTo(0), lessThanOrEqualTo(65535)));
+        MatcherAssert.assertThat(lightState.getSaturation(), allOf(greaterThanOrEqualTo(0), lessThanOrEqualTo(255)));
+        MatcherAssert.assertThat(lightState.getBrightness(), allOf(greaterThanOrEqualTo(0), lessThanOrEqualTo(255)));
     }
 
     public void clickListViewItem(String name) throws UiObjectNotFoundException {
