@@ -1,5 +1,8 @@
 package com.asconius.huetv;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +21,8 @@ import android.util.Log;
 import android.view.PixelCopy;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.asconius.huetv.event.ImageRequestEvent;
 import com.asconius.huetv.event.ScheduleJobEvent;
@@ -36,16 +41,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends HueActivity {
+public class MainActivity extends HueActivity implements SeekBar.OnSeekBarChangeListener {
 
     private static final String TAG = "HueTV";
+    private static final long MAX_EXECUTION_DELAY = 1000;
+
     private MediaProjection mediaProjection;
     private MediaProjectionManager mediaProjectionManager;
     private ImageReader imageReader;
     private boolean isServiceRunning = false;
+    private long minimumLatency;
     private Button startButton;
     private Button stopButton;
-    private ScreenCaptureJobScheduler screenCaptureJobScheduler;
+    private TextView frequencyText;
+    private SeekBar frequencyBar;
 
     public void authorize(View view) {
         startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), 1);
@@ -53,7 +62,7 @@ public class MainActivity extends HueActivity {
 
     public void start(View view) {
         isServiceRunning = true;
-        screenCaptureJobScheduler.scheduleJob(this);
+        scheduleJob();
         startButton.setEnabled(false);
         stopButton.setEnabled(true);
     }
@@ -65,6 +74,20 @@ public class MainActivity extends HueActivity {
     }
 
     @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        setFrequency(progress);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) { }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) { }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) { }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -72,7 +95,9 @@ public class MainActivity extends HueActivity {
         EventBus.getDefault().register(this);
         startButton = findViewById(R.id.startButton);
         stopButton = findViewById(R.id.stopButton);
-        screenCaptureJobScheduler = new ScreenCaptureJobScheduler();
+        frequencyText = findViewById(R.id.frequencyText);
+        frequencyBar = findViewById(R.id.frequencyBar);
+        setFrequency(frequencyBar.getProgress());
     }
 
     @Override
@@ -97,8 +122,23 @@ public class MainActivity extends HueActivity {
     @Subscribe
     public void onScheduleJobEvent(ScheduleJobEvent event) {
         if (isServiceRunning) {
-            screenCaptureJobScheduler.scheduleJob(getApplicationContext());
+            scheduleJob();
         }
+    }
+
+    private void setFrequency(int progress) {
+        int frequency = progress + 1;
+        minimumLatency = 1000L / frequency;
+        frequencyText.setText(String.format("Frequency: %d Hz", frequency));
+    }
+
+    private void scheduleJob() {
+        ComponentName serviceComponent = new ComponentName(this, ScreenCaptureJobService.class);
+        JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
+        builder.setMinimumLatency(minimumLatency);
+        builder.setOverrideDeadline(MAX_EXECUTION_DELAY);
+        JobScheduler jobScheduler = getSystemService(JobScheduler.class);
+        jobScheduler.schedule(builder.build());
     }
 
     private void captureImage() {
